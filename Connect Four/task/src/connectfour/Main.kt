@@ -24,7 +24,7 @@ fun buildBoard(): String {
             result = "6X7"
             break
         }
-        val res = result.replace(" ", "").uppercase()
+        val res = result.filter { it.isLetterOrDigit() }.uppercase()
         when {
             !Regex(".X.").matches(res) -> {
                 println("Invalid input")
@@ -39,7 +39,7 @@ fun buildBoard(): String {
                 continue
             }
             else -> {
-                result = result.trim()
+                result = res
                 break
             }
         }
