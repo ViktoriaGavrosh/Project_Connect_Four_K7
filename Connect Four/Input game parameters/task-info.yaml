@@ -145,7 +145,7 @@ feedback_link: https://hyperskill.org/projects/202/stages/1002/implement#comment
 status: Failed
 feedback:
   message: |-
-    Wrong answer in test #2
+    Wrong answer in test #3
 
     Wrong error message for out of range row size.
 
@@ -161,17 +161,9 @@ feedback:
     &gt; Joan
     Set the board dimensions (Rows x Columns)
     Press Enter for default (6 x 7)
-    &gt; 4x5
-    Board rows should be from 5 to 9
+    &gt; 6x
+    Board columns should be from 5 to 9
     Set the board dimensions (Rows x Columns)
     Press Enter for default (6 x 7)
-    &gt; 4X5
-    Board rows should be from 5 to 9
-    Set the board dimensions (Rows x Columns)
-    Press Enter for default (6 x 7)
-    &gt; 10x6
-    Invalid input
-    Set the board dimensions (Rows x Columns)
-    Press Enter for default (6 x 7)
-  time: "Wed, 12 Apr 2023 14:10:45 UTC"
+  time: "Wed, 12 Apr 2023 15:10:53 UTC"
 record: -1

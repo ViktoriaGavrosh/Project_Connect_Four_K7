@@ -26,16 +26,20 @@ fun buildBoard(): String {
         }
         val res = result.filter { it.isLetterOrDigit() }.uppercase()
         when {
-            !Regex(".X.").matches(res) -> {
+            res.indexOf('X') == -1 -> {
                 println("Invalid input")
                 continue
             }
-            !Regex("[5-9]..").matches(res) -> {
+            res.indexOf('X') != 1 || !Regex("[5-9][\\s\\S]*").matches(res) -> {
                 println("Board rows should be from 5 to 9")
                 continue
             }
-            !Regex("..[5-9]").matches(res) -> {
+            res.length > 3 || !Regex("[\\s\\S]*[5-9]").matches(res) -> {
                 println("Board columns should be from 5 to 9")
+                continue
+            }
+            !Regex(".X.").matches(res) -> {
+                println("Invalid input")
                 continue
             }
             else -> {
