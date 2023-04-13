@@ -1,21 +1,14 @@
 package connectfour
 
-class Game {
-    private var firstPlayer: Player
-    private var secondPlayer: Player
+class Game(private val players: MutableList<Player>) {
+    private val board: MutableList<MutableList<Square>>
     init {
-        println("Connect Four")
-        println("First player's name:")
-        firstPlayer = Player(readln())
-        println("Second player's name:")
-        secondPlayer = Player(readln())
-    }
-    fun start() {
-        val text = buildBoard()
-        printStartGame(firstPlayer.name, secondPlayer.name, text)
+        val text = readSizeBoard()
+        printStartGame(players[0].name, players[1].name, text)
+        board = fillBoard(text[2].digitToInt(), text[0].digitToInt())
     }
 
-    private fun buildBoard(): String {
+    private fun readSizeBoard(): String {
         var result: String
         while (true) {
             println("Set the board dimensions (Rows x Columns)\nPress Enter for default (6 x 7)")
@@ -53,5 +46,15 @@ class Game {
 
     private fun printStartGame(firstPlayer: String, secondPlayer: String, text: String) {
         println("$firstPlayer VS $secondPlayer\n${text[0]} X ${text[2]} board")
+    }
+
+    private fun fillBoard(rows: Int, places: Int): MutableList<MutableList<Square>> {
+        val listS = MutableList(rows) {MutableList<Square>(places) {Square(1, 1)} }
+        for (i in 0..rows) {
+            for (j in 0..places) {
+                listS[i][j] = Square(i + 1, j + 1 )
+            }
+        }
+        return listS
     }
 }
