@@ -26,7 +26,7 @@ fun buildBoard(): String {
         }
         val res = result.filter { it.isLetterOrDigit() }.uppercase()
         when {
-            res.indexOf('X') == -1 -> {
+            !Regex("\\d+X\\d+").matches(res) -> {
                 println("Invalid input")
                 continue
             }

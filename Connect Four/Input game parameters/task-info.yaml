@@ -142,28 +142,8 @@ files:
 
   learner_created: false
 feedback_link: https://hyperskill.org/projects/202/stages/1002/implement#comment
-status: Failed
+status: Solved
 feedback:
-  message: |-
-    Wrong answer in test #3
-
-    Wrong error message for out of range row size.
-
-    Please find below the output of your program during this failed test.
-    Note that the &#39;&gt;&#39; character indicates the beginning of the input line.
-
-    ---
-
-    Connect Four
-    First player&#39;s name:
-    &gt; Anna
-    Second player&#39;s name:
-    &gt; Joan
-    Set the board dimensions (Rows x Columns)
-    Press Enter for default (6 x 7)
-    &gt; 6x
-    Board columns should be from 5 to 9
-    Set the board dimensions (Rows x Columns)
-    Press Enter for default (6 x 7)
-  time: "Wed, 12 Apr 2023 15:10:53 UTC"
+  message: Congratulations!
+  time: "Thu, 13 Apr 2023 13:24:26 UTC"
 record: -1
