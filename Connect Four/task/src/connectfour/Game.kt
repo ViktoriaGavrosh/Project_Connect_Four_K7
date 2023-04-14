@@ -9,6 +9,52 @@ class Game(_players: MutableList<Player>) {
         board = fillBoard(text[2].digitToInt(), text[0].digitToInt())
         showBoard()
     }
+    var activePlayer = players[0]
+
+    fun determineWinner(): Player {
+        while (true) {
+            println("${activePlayer.name}'s turn:")
+            val move = readMove()
+            when {
+                move == "end" -> break
+                move == "" -> continue
+
+                }
+            }
+
+            moveTransition()
+        }
+        println("Game over!")
+        return activePlayer
+    }
+
+    private fun readMove(): String {
+        val move: String = readln()
+        return when {
+            move == "end" ->  move
+            !Regex("\\d").matches(move) -> {
+                println("Incorrect column number")
+                ""
+            }
+            move.toInt() !in (1..this.board.size) -> {
+                println("The column number is out of range (1 - ${this.board.size}")
+                ""
+            }
+            !putChip(move.toInt()) -> {
+                println("Column $move is full")
+                ""
+            }
+            else -> move
+        }
+    }
+
+    private fun putChip(column: Int): Boolean {
+
+    }
+
+    private fun moveTransition() {
+        activePlayer = if (activePlayer == players[0]) players[1] else players[0]
+    }
 
     private fun readSizeBoard(): String {
         var result: String

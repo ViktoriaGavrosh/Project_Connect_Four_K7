@@ -403,6 +403,105 @@ files:
 
 
   learner_created: false
+- name: src/connectfour/Player.kt
+  visible: true
+  text: |-
+    package connectfour
+
+    class Player(val name: String, val color: String)
+  learner_created: true
+- name: src/connectfour/Game.kt
+  visible: true
+  text: |-
+    package connectfour
+
+    class Game(_players: MutableList<Player>) {
+        private val players = _players
+        private val board: MutableList<MutableList<Square>>
+        init {
+            val text = readSizeBoard()
+            printStartGame(players[0].name, players[1].name, text)
+            board = fillBoard(text[2].digitToInt(), text[0].digitToInt())
+            showBoard()
+        }
+
+        private fun readSizeBoard(): String {
+            var result: String
+            while (true) {
+                println("Set the board dimensions (Rows x Columns)\nPress Enter for default (6 x 7)")
+                result = readln()
+                if (result == "") {
+                    result = "6X7"
+                    break
+                }
+                val res = result.filter { it.isLetterOrDigit() }.uppercase()
+                when {
+                    !Regex("\\d+X\\d+").matches(res) -> {
+                        println("Invalid input")
+                        continue
+                    }
+                    res.indexOf('X') != 1 || !Regex("[5-9][\\s\\S]*").matches(res) -> {
+                        println("Board rows should be from 5 to 9")
+                        continue
+                    }
+                    res.length > 3 || !Regex("[\\s\\S]*[5-9]").matches(res) -> {
+                        println("Board columns should be from 5 to 9")
+                        continue
+                    }
+                    !Regex(".X.").matches(res) -> {
+                        println("Invalid input")
+                        continue
+                    }
+                    else -> {
+                        result = res
+                        break
+                    }
+                }
+            }
+            return result
+        }
+
+        private fun printStartGame(firstPlayer: String, secondPlayer: String, text: String) {
+            println("$firstPlayer VS $secondPlayer\n${text[0]} X ${text[2]} board")
+        }
+
+        private fun fillBoard(rows: Int, places: Int): MutableList<MutableList<Square>> {
+            val listS = MutableList(rows) {MutableList(places) {Square(1, 1)} }
+            for (i in 0..rows - 1) {
+                for (j in 0..places - 1) {
+                    listS[i][j] = Square(i + 1, j + 1 )
+                }
+            }
+            return listS
+        }
+
+        private fun showBoard() {
+            for (i in 1..board.size) print(" $i")
+            for (j in board[0].size - 1 downTo 0) {
+                print("\n|")
+                for (i in 0..board.size - 1) print("${board[i][j]}|")
+            }
+            print("\n=")
+            repeat(board.size) {
+                print("==")
+            }
+        }
+    }
+  learner_created: true
+- name: src/connectfour/Square.kt
+  visible: true
+  text: |-
+    package connectfour
+
+    class Square(val line: Int, val place: Int) {
+        var owner: Player? = null
+        var color: String = " "
+        override fun toString(): String {
+            return color
+        }
+
+    }
+  learner_created: true
 feedback_link: https://hyperskill.org/learn/step/14780#comment
 status: Unchecked
 record: -1
