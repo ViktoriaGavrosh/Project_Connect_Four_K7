@@ -1,11 +1,13 @@
 package connectfour
 
-class Game(private val players: MutableList<Player>) {
+class Game(_players: MutableList<Player>) {
+    private val players = _players
     private val board: MutableList<MutableList<Square>>
     init {
         val text = readSizeBoard()
         printStartGame(players[0].name, players[1].name, text)
         board = fillBoard(text[2].digitToInt(), text[0].digitToInt())
+        showBoard()
     }
 
     private fun readSizeBoard(): String {
@@ -49,12 +51,24 @@ class Game(private val players: MutableList<Player>) {
     }
 
     private fun fillBoard(rows: Int, places: Int): MutableList<MutableList<Square>> {
-        val listS = MutableList(rows) {MutableList<Square>(places) {Square(1, 1)} }
-        for (i in 0..rows) {
-            for (j in 0..places) {
+        val listS = MutableList(rows) {MutableList(places) {Square(1, 1)} }
+        for (i in 0..rows - 1) {
+            for (j in 0..places - 1) {
                 listS[i][j] = Square(i + 1, j + 1 )
             }
         }
         return listS
+    }
+
+    private fun showBoard() {
+        for (i in 1..board.size) print(" $i")
+        for (j in board[0].size - 1 downTo 0) {
+            print("\n|")
+            for (i in 0..board.size - 1) print("${board[i][j]}|")
+        }
+        print("\n=")
+        repeat(board.size) {
+            print("==")
+        }
     }
 }
