@@ -1,7 +1,7 @@
 package connectfour
 
-class Game(_players: MutableList<Player>) {
-    private val players = _players
+class Game(twoPlayers: MutableList<Player>) {
+    private val players = twoPlayers
     private val board: MutableList<MutableList<Square>>
     init {
         val text = readSizeBoard()
@@ -9,19 +9,16 @@ class Game(_players: MutableList<Player>) {
         board = fillBoard(text[2].digitToInt(), text[0].digitToInt())
         showBoard()
     }
-    var activePlayer = players[0]
+    private var activePlayer = players[0]
 
     fun determineWinner(): Player {
         while (true) {
             println("${activePlayer.name}'s turn:")
-            val move = readMove()
-            when {
-                move == "end" -> break
-                move == "" -> continue
-
-                }
+            when (readMove()) {
+                "end" -> break
+                "" -> continue
+                else -> showBoard()
             }
-
             moveTransition()
         }
         println("Game over!")
@@ -32,12 +29,12 @@ class Game(_players: MutableList<Player>) {
         val move: String = readln()
         return when {
             move == "end" ->  move
-            !Regex("\\d").matches(move) -> {
+            !Regex("\\d+").matches(move) -> {
                 println("Incorrect column number")
                 ""
             }
-            move.toInt() !in (1..this.board.size) -> {
-                println("The column number is out of range (1 - ${this.board.size}")
+            move.toInt() !in (1..board.size) -> {
+                println("The column number is out of range (1 - ${board.size})")
                 ""
             }
             !putChip(move.toInt()) -> {
@@ -49,7 +46,14 @@ class Game(_players: MutableList<Player>) {
     }
 
     private fun putChip(column: Int): Boolean {
-
+        var count = 0
+        for (i in board[column - 1]) if (i.chip == " ") {
+            i.chip = activePlayer.chip
+            i.owner = activePlayer
+            count++
+            break
+        }
+        return count == 1
     }
 
     private fun moveTransition() {
@@ -98,8 +102,8 @@ class Game(_players: MutableList<Player>) {
 
     private fun fillBoard(rows: Int, places: Int): MutableList<MutableList<Square>> {
         val listS = MutableList(rows) {MutableList(places) {Square(1, 1)} }
-        for (i in 0..rows - 1) {
-            for (j in 0..places - 1) {
+        for (i in 0 until rows) {
+            for (j in 0 until places) {
                 listS[i][j] = Square(i + 1, j + 1 )
             }
         }
@@ -110,11 +114,12 @@ class Game(_players: MutableList<Player>) {
         for (i in 1..board.size) print(" $i")
         for (j in board[0].size - 1 downTo 0) {
             print("\n|")
-            for (i in 0..board.size - 1) print("${board[i][j]}|")
+            for (i in 0 until board.size) print("${board[i][j]}|")
         }
         print("\n=")
         repeat(board.size) {
             print("==")
         }
+        println("")
     }
 }
