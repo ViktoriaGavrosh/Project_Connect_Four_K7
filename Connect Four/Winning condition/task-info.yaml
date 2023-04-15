@@ -747,6 +747,9 @@ files:
 - name: src/connectfour/VerticalLineWin.kt
   visible: true
   learner_created: true
+- name: src/connectfour/LeftDiagonalLineWin.kt
+  visible: true
+  learner_created: true
 feedback_link: https://hyperskill.org/learn/step/14781#comment
 status: Unchecked
 record: -1
