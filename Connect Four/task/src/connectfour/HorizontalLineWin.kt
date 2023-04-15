@@ -1,7 +1,7 @@
 package connectfour
 
-class HorizontalLineWin(board: MutableList<MutableList<Square>>, activeSquare: Square): Win(board, activeSquare) {
-    override fun buildLine(): String {
+class HorizontalLineWin : Win() {
+    override fun buildLine(board: MutableList<MutableList<Square>>, activeSquare: Square): String {
         return board[activeSquare.line - 1].joinToString {""}
     }
 }

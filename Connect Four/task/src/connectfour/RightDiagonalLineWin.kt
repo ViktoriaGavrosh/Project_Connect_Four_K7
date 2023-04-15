@@ -1,9 +1,9 @@
 package connectfour
 
-class RightDiagonalLineWin(board: MutableList<MutableList<Square>>, activeSquare: Square): Win(board, activeSquare) {
-    override fun buildLine(): String {
-        val startSquare = findSquare(activeSquare.line, activeSquare.place)
-        val finishSquare = findSquare(activeSquare.place, activeSquare.line)
+class RightDiagonalLineWin: Win() {
+    override fun buildLine(board: MutableList<MutableList<Square>>, activeSquare: Square): String {
+        val startSquare = findSquare(activeSquare.line, activeSquare.place, board)
+        val finishSquare = findSquare(activeSquare.place, activeSquare.line, board)
         var text = ""
         for (i in startSquare[0] until finishSquare[0]) {
             for (j in startSquare[1] downTo finishSquare[1]) {
@@ -13,7 +13,7 @@ class RightDiagonalLineWin(board: MutableList<MutableList<Square>>, activeSquare
         return text
     }
 
-    private fun findSquare(first: Int, second: Int): MutableList<Int> {
+    private fun findSquare(first: Int, second: Int, board: MutableList<MutableList<Square>>): MutableList<Int> {
         val result = mutableListOf(first, second)
         result[0] = --result[0]
         result[1] = --result[1]

@@ -10,6 +10,13 @@ class Game(twoPlayers: MutableList<Player>) {
         showBoard()
     }
     private var activePlayer = players[0]
+    private var activeSquare = board[0][0]
+    private val listWin = buildList {
+        add(HorizontalLineWin())
+        add(VerticalLineWin())
+        add(LeftDiagonalLineWin())
+        add(RightDiagonalLineWin())
+    }
 
     fun determineWinner(): Player {
         while (true) {
@@ -41,8 +48,14 @@ class Game(twoPlayers: MutableList<Player>) {
                 println("Column $move is full")
                 ""
             }
+            checkWin() -> "end"
             else -> move
         }
+    }
+
+    private fun checkWin(): Boolean {
+        for (i in listWin) if (i.checkWinner(board, activeSquare)) return true
+        return false
     }
 
     private fun putChip(column: Int): Boolean {
@@ -51,6 +64,7 @@ class Game(twoPlayers: MutableList<Player>) {
             i.chip = activePlayer.chip
             i.owner = activePlayer
             count++
+            activeSquare = i
             break
         }
         return count == 1

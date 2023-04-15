@@ -1,13 +1,14 @@
 package connectfour
 
-abstract class Win(val board: MutableList<MutableList<Square>>, val activeSquare: Square) {
-    var line: String = this.buildLine()
+abstract class Win() {
+    var line: String = ""
     val win1 = "oooo"
     val win2 = "****"
 
-    abstract fun buildLine(): String
+    abstract fun buildLine(board: MutableList<MutableList<Square>>, activeSquare: Square): String
 
-    fun checkWinner(): Boolean {
+    fun checkWinner(board: MutableList<MutableList<Square>>, activeSquare: Square): Boolean {
+        line = buildLine(board, activeSquare)
         val isWin = if (activeSquare.chip in win1) win1 in line else win2 in line
         if (isWin) {
             println("Player ${activeSquare.owner!!.name} won")
