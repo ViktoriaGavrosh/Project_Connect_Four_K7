@@ -5,10 +5,10 @@ class LeftDiagonalLineWin : Win() {
         val startSquare = findStartSquare(activeSquare)
         val finishSquare = findFinishSquare(board, activeSquare)
         var text = ""
+        var j = 0
         for (i in startSquare[0]..finishSquare[0]) {
-            for (j in startSquare[1]..finishSquare[1]) {
-                text += board[i][j].toString()
-            }
+            text += board[i][startSquare[1] + j].toString()
+            j++
         }
         return text
     }

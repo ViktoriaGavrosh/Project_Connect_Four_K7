@@ -5,12 +5,10 @@ class RightDiagonalLineWin: Win() {
         val startSquare = findStartSquare(activeSquare.line, activeSquare.place, board)
         val finishSquare = findFinishSquare(activeSquare.place, activeSquare.line, board)
         var text = ""
-        println("start ${startSquare.joinToString()} finish ${finishSquare.joinToString()}")
-        for (i in startSquare[0]..finishSquare[0]) {  //проходит 9 раз вместо 3
-            for (j in startSquare[1] downTo finishSquare[1]) {
-                text += board[i][j].toString()
-                println("print $text")
-            }
+        var j = 0
+        for (i in startSquare[0]..finishSquare[0]) {
+            text += board[i][startSquare[1] - j].toString()
+            j++
         }
         return text
     }
