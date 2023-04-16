@@ -19,9 +19,8 @@ class Game(twoPlayers: MutableList<Player>) {
             when (readMove()) {
                 "end" -> break
                 "" -> continue
-                else -> showBoard()
+                else -> moveTransition()
             }
-            moveTransition()
         }
         println("Game over!")
         return activePlayer
@@ -55,6 +54,7 @@ class Game(twoPlayers: MutableList<Player>) {
             i.owner = activePlayer
             count++
             checker.activeSquare = i
+            showBoard()
             break
         }
         return count == 1

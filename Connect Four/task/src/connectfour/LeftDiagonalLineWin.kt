@@ -15,10 +15,13 @@ class LeftDiagonalLineWin : Win() {
 
     private fun findStartSquare(activeSquare: Square): MutableList<Int> {
         val result = mutableListOf(activeSquare.line, activeSquare.place)
+        result[0] = --result[0]
+        result[1] = --result[1]
         while (true) {
+            if (result[0] == 0 || result[1] == 0) return result
             result[0] = --result[0]
             result[1] = --result[1]
-            if (result[0] == 0 || result[1] == 0) return result
+
         }
     }
 

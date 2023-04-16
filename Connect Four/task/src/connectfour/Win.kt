@@ -8,7 +8,7 @@ abstract class Win() {
     abstract fun buildLine(board: MutableList<MutableList<Square>>, activeSquare: Square): String
 
     fun checkWinner(board: MutableList<MutableList<Square>>, activeSquare: Square): Boolean {
-        line = buildLine(board, activeSquare)
+        this.line = buildLine(board, activeSquare)
         val isWin = if (activeSquare.chip in win1) win1 in line else win2 in line
         if (isWin) {
             println("Player ${activeSquare.owner!!.name} won")
