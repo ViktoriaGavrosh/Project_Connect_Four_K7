@@ -1,4 +1,6 @@
-package connectfour
+package connectfour.checkWin
+
+import connectfour.Square
 
 abstract class Win() {
     var line: String = ""

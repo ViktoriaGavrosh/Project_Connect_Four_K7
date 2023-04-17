@@ -1,4 +1,6 @@
-package connectfour
+package connectfour.checkWin
+
+import connectfour.*
 
 class CheckerWin(square: Square) {
     var activeSquare = square

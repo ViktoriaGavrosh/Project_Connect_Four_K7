@@ -1,4 +1,6 @@
-package connectfour
+package connectfour.checkWin
+
+import connectfour.Square
 
 class RightDiagonalLineWin: Win() {
     override fun buildLine(board: MutableList<MutableList<Square>>, activeSquare: Square): String {

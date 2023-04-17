@@ -536,6 +536,324 @@ files:
 
 
   learner_created: false
+- name: src/connectfour/Player.kt
+  visible: true
+  text: |-
+    package connectfour
+
+    class Player(val name: String, val chip: String)
+  learner_created: true
+- name: src/connectfour/Game.kt
+  visible: true
+  text: |-
+    package connectfour
+
+    class Game(twoPlayers: MutableList<Player>) {
+        private val players = twoPlayers
+        private val board: MutableList<MutableList<Square>>
+        init {
+            val text = readSizeBoard()
+            printStartGame(players[0].name, players[1].name, text)
+            board = fillBoard(text[2].digitToInt(), text[0].digitToInt())
+            showBoard()
+        }
+        private var activePlayer = players[0]
+        private val checker = CheckerWin(board[0][0])
+
+
+        fun determineWinner(): Player {
+            while (true) {
+                println("${activePlayer.name}'s turn:")
+                when (readMove()) {
+                    "end" -> break
+                    "" -> continue
+                    else -> moveTransition()
+                }
+            }
+            println("Game over!")
+            return activePlayer
+        }
+
+        private fun readMove(): String {
+            val move: String = readln()
+            return when {
+                move == "end" ->  move
+                !Regex("\\d+").matches(move) -> {
+                    println("Incorrect column number")
+                    ""
+                }
+                move.toInt() !in (1..board.size) -> {
+                    println("The column number is out of range (1 - ${board.size})")
+                    ""
+                }
+                !putChip(move.toInt()) -> {
+                    println("Column $move is full")
+                    ""
+                }
+                checker.checkWinAndDraw(board) -> "end"
+                else -> move
+            }
+        }
+
+        private fun putChip(column: Int): Boolean {
+            var count = 0
+            for (i in board[column - 1]) if (i.chip == " ") {
+                i.chip = activePlayer.chip
+                i.owner = activePlayer
+                count++
+                checker.activeSquare = i
+                showBoard()
+                break
+            }
+            return count == 1
+        }
+
+        private fun moveTransition() {
+            activePlayer = if (activePlayer == players[0]) players[1] else players[0]
+        }
+
+        private fun readSizeBoard(): String {
+            var result: String
+            while (true) {
+                println("Set the board dimensions (Rows x Columns)\nPress Enter for default (6 x 7)")
+                result = readln()
+                if (result == "") {
+                    result = "6X7"
+                    break
+                }
+                val res = result.filter { it.isLetterOrDigit() }.uppercase()
+                when {
+                    !Regex("\\d+X\\d+").matches(res) -> {
+                        println("Invalid input")
+                        continue
+                    }
+                    res.indexOf('X') != 1 || !Regex("[5-9][\\s\\S]*").matches(res) -> {
+                        println("Board rows should be from 5 to 9")
+                        continue
+                    }
+                    res.length > 3 || !Regex("[\\s\\S]*[5-9]").matches(res) -> {
+                        println("Board columns should be from 5 to 9")
+                        continue
+                    }
+                    !Regex(".X.").matches(res) -> {
+                        println("Invalid input")
+                        continue
+                    }
+                    else -> {
+                        result = res
+                        break
+                    }
+                }
+            }
+            return result
+        }
+
+        private fun printStartGame(firstPlayer: String, secondPlayer: String, text: String) {
+            println("$firstPlayer VS $secondPlayer\n${text[0]} X ${text[2]} board")
+        }
+
+        private fun fillBoard(rows: Int, places: Int): MutableList<MutableList<Square>> {
+            val listS = MutableList(rows) {MutableList(places) {Square(1, 1)} }
+            for (i in 0 until rows) {
+                for (j in 0 until places) {
+                    listS[i][j] = Square(i + 1, j + 1 )
+                }
+            }
+            return listS
+        }
+
+        private fun showBoard() {
+            for (i in 1..board.size) print(" $i")
+            for (j in board[0].size - 1 downTo 0) {
+                print("\n|")
+                for (i in 0 until board.size) print("${board[i][j]}|")
+            }
+            print("\n=")
+            repeat(board.size) {
+                print("==")
+            }
+            println("")
+        }
+    }
+  learner_created: true
+- name: src/connectfour/Square.kt
+  visible: true
+  text: |-
+    package connectfour
+
+    class Square(val line: Int, val place: Int) {
+        var owner: Player? = null
+        var chip: String = " "
+        override fun toString(): String {
+            return chip
+        }
+
+    }
+  learner_created: true
+- name: src/connectfour/Gameboard.kt
+  visible: true
+  learner_created: true
+- name: src/connectfour/checkWin/CheckerWin.kt
+  visible: true
+  text: |-
+    package connectfour
+
+    class CheckerWin(square: Square) {
+        var activeSquare = square
+        private val listWin = buildList {
+            add(HorizontalLineWin())
+            add(VerticalLineWin())
+            add(LeftDiagonalLineWin())
+            add(RightDiagonalLineWin())
+        }
+
+        fun checkWinAndDraw(board: MutableList<MutableList<Square>>): Boolean {
+            for (i in listWin) if (i.checkWinner(board, activeSquare)) return true
+            return checkDraw(board)
+        }
+
+        private fun checkDraw(board: MutableList<MutableList<Square>>): Boolean {
+            for (i in board) if (i.last().chip == " ") return false
+            println("It is a draw")
+            return true
+        }
+    }
+  learner_created: true
+- name: src/connectfour/checkWin/Win.kt
+  visible: true
+  text: |-
+    package connectfour
+
+    abstract class Win() {
+        var line: String = ""
+        val win1 = "oooo"
+        val win2 = "****"
+
+        abstract fun buildLine(board: MutableList<MutableList<Square>>, activeSquare: Square): String
+
+        fun checkWinner(board: MutableList<MutableList<Square>>, activeSquare: Square): Boolean {
+            this.line = buildLine(board, activeSquare)
+            val isWin = if (activeSquare.chip in win1) win1 in line else win2 in line
+            if (isWin) {
+                println("Player ${activeSquare.owner!!.name} won")
+                return true
+            }
+            return false
+        }
+    }
+  learner_created: true
+- name: src/connectfour/checkWin/HorizontalLineWin.kt
+  visible: true
+  text: |-
+    package connectfour
+
+    class HorizontalLineWin : Win() {
+        override fun buildLine(board: MutableList<MutableList<Square>>, activeSquare: Square): String {
+            var text = ""
+            for (i in board[activeSquare.line - 1]) {
+                text += i.chip
+            }
+            return text
+        }
+    }
+  learner_created: true
+- name: src/connectfour/checkWin/VerticalLineWin.kt
+  visible: true
+  text: |-
+    package connectfour
+
+    class VerticalLineWin : Win() {
+        override fun buildLine(board: MutableList<MutableList<Square>>, activeSquare: Square): String {
+            var text = ""
+            for (i in board.indices) text += board[i][activeSquare.place - 1].toString()
+            return text
+        }
+    }
+  learner_created: true
+- name: src/connectfour/checkWin/RightDiagonalLineWin.kt
+  visible: true
+  text: |-
+    package connectfour
+
+    class RightDiagonalLineWin: Win() {
+        override fun buildLine(board: MutableList<MutableList<Square>>, activeSquare: Square): String {
+            val startSquare = findStartSquare(activeSquare.line, activeSquare.place, board)
+            val finishSquare = findFinishSquare(activeSquare.place, activeSquare.line, board)
+            var text = ""
+            var j = 0
+            for (i in startSquare[0]..finishSquare[0]) {
+                text += board[i][startSquare[1] - j].toString()
+                j++
+            }
+            return text
+        }
+
+        private fun findStartSquare(first: Int, second: Int, board: MutableList<MutableList<Square>>): MutableList<Int> {
+            val result = mutableListOf(first, second)
+            result[0] = --result[0]
+            result[1] = --result[1]
+            while (true) {
+                if (result[0] == 0 || result[1] == board[0].size - 1) return result
+                result[0] = --result[0]
+                result[1] = ++result[1]
+            }
+        }
+
+        private fun findFinishSquare(first: Int, second: Int, board: MutableList<MutableList<Square>>): MutableList<Int> {
+            val result = mutableListOf(first, second)
+            result[0] = --result[0]
+            result[1] = --result[1]
+            while (true) {
+                if (result[0] == board[0].size - 1 || result[1] == 0) return result
+                result[0] = ++result[0]
+                result[1] = --result[1]
+            }
+        }
+
+    }
+  learner_created: true
+- name: src/connectfour/checkWin/LeftDiagonalLineWin.kt
+  visible: true
+  text: |-
+    package connectfour
+
+    class LeftDiagonalLineWin : Win() {
+        override fun buildLine(board: MutableList<MutableList<Square>>, activeSquare: Square): String {
+            val startSquare = findStartSquare(activeSquare)
+            val finishSquare = findFinishSquare(board, activeSquare)
+            var text = ""
+            var j = 0
+            for (i in startSquare[0]..finishSquare[0]) {
+                text += board[i][startSquare[1] + j].toString()
+                j++
+            }
+            return text
+        }
+
+        private fun findStartSquare(activeSquare: Square): MutableList<Int> {
+            val result = mutableListOf(activeSquare.line, activeSquare.place)
+            result[0] = --result[0]
+            result[1] = --result[1]
+            while (true) {
+                if (result[0] == 0 || result[1] == 0) return result
+                result[0] = --result[0]
+                result[1] = --result[1]
+
+            }
+        }
+
+        private fun findFinishSquare(board: MutableList<MutableList<Square>>, activeSquare: Square): MutableList<Int> {
+            val result = mutableListOf(activeSquare.line, activeSquare.place)
+            result[0] = --result[0]
+            result[1] = --result[1]
+            while (true) {
+                if (result[0] == board.size - 1 || result[1] == board[0].size - 1) return result
+                result[0] = ++result[0]
+                result[1] = ++result[1]
+            }
+        }
+    }
+  learner_created: true
 feedback_link: https://hyperskill.org/learn/step/14782#comment
 status: Unchecked
 record: -1
