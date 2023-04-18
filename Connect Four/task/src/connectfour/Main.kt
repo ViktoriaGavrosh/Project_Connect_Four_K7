@@ -13,9 +13,11 @@ class Main {
     
     fun start() {
         startGame()
+        var isEnd: Boolean
         for (i in 1..gameAmount) {
             if (gameAmount > 1) println("Game #$i")
-            Game(players, i, sizeBoard).play()
+            isEnd = Game(players, i, sizeBoard).play()
+            if (isEnd) break
             if (gameAmount > 1) printScore()
         }
         println("Game over!")

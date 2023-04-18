@@ -11,11 +11,13 @@ class Game(private val players: List<Player>, gameNumber: Int, sizeBoard: String
     private var activePlayer = if (gameNumber % 2 != 0) players[0] else players[1]
     private val checker = CheckerWin(gameBoard.board[0][0], players)
 
-    fun play() {
+    fun play(): Boolean {
+        val isEnd = true
         while (true) {
             println("${activePlayer.name}'s turn:")
             when (readMove()) {
-                "end" -> break
+                "end" -> return isEnd
+                "win" -> return !isEnd
                 "" -> continue
                 else -> moveTransition()
             }
@@ -38,7 +40,7 @@ class Game(private val players: List<Player>, gameNumber: Int, sizeBoard: String
                 println("Column $move is full")
                 ""
             }
-            checker.checkWinAndDraw(gameBoard.board) -> "end"
+            checker.checkWinAndDraw(gameBoard.board) -> "win"
             else -> move
         }
     }
