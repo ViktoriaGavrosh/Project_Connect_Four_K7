@@ -2,7 +2,7 @@ package connectfour
 
 import connectfour.checkWin.CheckerWin
 
-class Game(private val twoPlayers: List<Player>, number: Int, private val board: MutableList<MutableList<Square>>) {
+class Game(twoPlayers: List<Player>, number: Int, private val board: MutableList<MutableList<Square>>) {
     private val gameNumber = number
     private val players = twoPlayers
     private var activePlayer = if (gameNumber % 2 != 0) players[0] else players[1]
@@ -48,7 +48,7 @@ class Game(private val twoPlayers: List<Player>, number: Int, private val board:
             i.owner = activePlayer
             count++
             checker.activeSquare = i
-            showBoard()
+            //showBoard()
             break
         }
         return count == 1

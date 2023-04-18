@@ -18,7 +18,7 @@ class GameBoard(private val players: List<Player>) {
     }
 
     fun printStartGame() {
-        println("$players[0] VS $players[1]\n${sizeBoard[0]} X ${sizeBoard[2]} board")
+        println("${players[0].name} VS ${players[1].name}\n${sizeBoard[0]} X ${sizeBoard[2]} board")
     }
 
     private fun readSizeBoard(): String {

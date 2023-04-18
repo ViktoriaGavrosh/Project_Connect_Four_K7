@@ -690,9 +690,6 @@ files:
 
     }
   learner_created: true
-- name: src/connectfour/Gameboard.kt
-  visible: true
-  learner_created: true
 - name: src/connectfour/checkWin/CheckerWin.kt
   visible: true
   text: |-
@@ -853,6 +850,9 @@ files:
             }
         }
     }
+  learner_created: true
+- name: src/connectfour/GameBoard.kt
+  visible: true
   learner_created: true
 feedback_link: https://hyperskill.org/learn/step/14782#comment
 status: Unchecked
