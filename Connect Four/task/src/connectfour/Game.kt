@@ -2,11 +2,14 @@ package connectfour
 
 import connectfour.checkWin.CheckerWin
 
-class Game(twoPlayers: List<Player>, number: Int, private val board: MutableList<MutableList<Square>>) {
-    private val gameNumber = number
-    private val players = twoPlayers
+class Game(private val players: List<Player>, gameNumber: Int, sizeBoard: String) {
+    private val gameBoard: GameBoard
+    init {
+        gameBoard = GameBoard(sizeBoard)
+        gameBoard.showBoard()
+    }
     private var activePlayer = if (gameNumber % 2 != 0) players[0] else players[1]
-    private val checker = CheckerWin(board[0][0])
+    private val checker = CheckerWin(gameBoard.board[0][0], players)
 
     fun play() {
         while (true) {
@@ -17,7 +20,6 @@ class Game(twoPlayers: List<Player>, number: Int, private val board: MutableList
                 else -> moveTransition()
             }
         }
-        println("Game over!")
     }
 
     private fun readMove(): String {
@@ -28,27 +30,27 @@ class Game(twoPlayers: List<Player>, number: Int, private val board: MutableList
                 println("Incorrect column number")
                 ""
             }
-            move.toInt() !in (1..board.size) -> {
-                println("The column number is out of range (1 - ${board.size})")
+            move.toInt() !in (1..gameBoard.board.size) -> {
+                println("The column number is out of range (1 - ${gameBoard.board.size})")
                 ""
             }
             !putChip(move.toInt()) -> {
                 println("Column $move is full")
                 ""
             }
-            checker.checkWinAndDraw(board) -> "end"
+            checker.checkWinAndDraw(gameBoard.board) -> "end"
             else -> move
         }
     }
 
     private fun putChip(column: Int): Boolean {
         var count = 0
-        for (i in board[column - 1]) if (i.chip == " ") {
+        for (i in gameBoard.board[column - 1]) if (i.chip == " ") {
             i.chip = activePlayer.chip
             i.owner = activePlayer
             count++
             checker.activeSquare = i
-            //showBoard()
+            gameBoard.showBoard()
             break
         }
         return count == 1
